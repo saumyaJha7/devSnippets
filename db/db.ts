@@ -11,10 +11,10 @@ export const initDB = async () => {
             title TEXT NOT NULL,
             code TEXT,
             language TEXT,
-            tags : TEXT,
-            isFavourite : INTEGER DEFAULT 0,
-            createdAT : TEXT DEFAULT CURRENT_TIMESTAMP,
-            updatedAt : TEXT 
+            tags TEXT,
+            isFavourite  INTEGER DEFAULT 0,
+            createdAT TEXT DEFAULT CURRENT_TIMESTAMP,
+            updatedAt TEXT DEFAULT CURRENT_TIMESTAMP
         );
         `,
     );
