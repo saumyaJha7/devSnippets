@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 
@@ -31,7 +32,12 @@ const snippets = [
 ];
 
 export default function HomeScreen() {
+  const router = useRouter();
   const [search, setSearch] = useState("");
+
+  const onSettingsPress = () => {
+    router.push("/(screens)/SettingsScreen");
+  };
 
   return (
     <View style={styles.container}>
@@ -47,7 +53,7 @@ export default function HomeScreen() {
         renderItem={({ item }) => <SnippetCard snippet={item} />}
       />
 
-      <BottomNavigation />
+      <BottomNavigation onSettingsPress={onSettingsPress} />
     </View>
   );
 }
