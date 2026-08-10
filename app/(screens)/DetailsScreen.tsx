@@ -1,14 +1,14 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useLocalSearchParams } from "expo-router";
+import { Text, View } from "react-native";
 
-const DetailsScreen = () => {
+export default function DetailsScreen() {
+  const { id } = useLocalSearchParams();
+
+  console.log("id", id);
+
   return (
-    <View>
-      <Text>DetailsScreen</Text>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>{id}</Text>
     </View>
   );
-};
-
-export default DetailsScreen;
-
-const styles = StyleSheet.create({});
+}

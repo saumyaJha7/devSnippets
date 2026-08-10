@@ -39,6 +39,10 @@ export default function HomeScreen() {
     router.push("/(screens)/SettingsScreen");
   };
 
+  const onCreatePress = () => {
+    router.push("/(screens)/CreateScreen");
+  };
+
   return (
     <View style={styles.container}>
       <HomeHeader />
@@ -53,7 +57,10 @@ export default function HomeScreen() {
         renderItem={({ item }) => <SnippetCard snippet={item} />}
       />
 
-      <BottomNavigation onSettingsPress={onSettingsPress} />
+      <BottomNavigation
+        onSettingsPress={onSettingsPress}
+        onCreatePress={onCreatePress}
+      />
     </View>
   );
 }
