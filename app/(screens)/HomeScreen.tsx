@@ -67,7 +67,19 @@ export default function HomeScreen() {
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 100 }}
-        renderItem={({ item }) => <SnippetCard snippet={item} />}
+        renderItem={({ item }) => (
+          <SnippetCard
+            snippet={item}
+            onPress={() => {
+              router.push({
+                pathname: "/(screens)/DetailsScreen",
+                params: {
+                  id: item.id,
+                },
+              });
+            }}
+          />
+        )}
       />
 
       <BottomNavigation
