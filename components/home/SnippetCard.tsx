@@ -15,6 +15,13 @@ type Props = {
 };
 
 export default function SnippetCard({ snippet, onPress }: Props) {
+  const tagsValue = snippet.tags as unknown as string | string[] | undefined;
+  const tags = Array.isArray(tagsValue)
+    ? tagsValue
+    : typeof tagsValue === "string"
+      ? tagsValue.split(",").map((tag: string) => tag.trim())
+      : [];
+
   return (
     <Pressable
       onPress={onPress}
@@ -24,7 +31,7 @@ export default function SnippetCard({ snippet, onPress }: Props) {
         <Text style={styles.title}>{snippet.title}</Text>
 
         <Text style={styles.subtitle}>
-          {snippet.language} • {snippet.tags.join(" • ")}
+          {snippet.language} • {tags.join(" • ")}
         </Text>
       </View>
 

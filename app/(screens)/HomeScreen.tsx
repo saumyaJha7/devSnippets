@@ -1,39 +1,52 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 
 import BottomNavigation from "@/components/home/BottomNavigation";
 import HomeHeader from "@/components/home/HomeHeader";
 import SearchBar from "@/components/home/SearchBar";
 import SnippetCard from "@/components/home/SnippetCard";
+import { initDB } from "@/db/db";
 
-const snippets = [
-  {
-    id: "1",
-    title: "React useEffect",
-    language: "JavaScript",
-    tags: ["React", "Hooks"],
-    favourite: true,
-  },
-  {
-    id: "2",
-    title: "JWT Authentication",
-    language: "Node.js",
-    tags: ["Auth", "Backend"],
-    favourite: false,
-  },
-  {
-    id: "3",
-    title: "Binary Search",
-    language: "C++",
-    tags: ["DSA"],
-    favourite: false,
-  },
-];
+type SnippetsType = {
+  id: string;
+  title: string;
+  language: string;
+  tags: string[];
+  favourite: boolean;
+  code: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export default function HomeScreen() {
   const router = useRouter();
+
   const [search, setSearch] = useState("");
+  const [snippets, setSnippets] = useState<SnippetsType[] | null>(null);
+
+  useEffect(() => {
+    const loadSnippets = async () => {
+      try {
+        const dbInstance = await initDB();
+
+        if (!dbInstance) {
+          console.error("initDB returned undefined");
+          setSnippets(null);
+          return;
+        }
+
+        const snippetsFromDb = await dbInstance.getAllAsync<SnippetsType>(
+          "SELECT * FROM snippets",
+        );
+        setSnippets(snippetsFromDb);
+      } catch (error) {
+        console.error("Failed to load snippets:", error);
+      }
+    };
+
+    loadSnippets();
+  }, []);
 
   const onSettingsPress = () => {
     router.push("/(screens)/SettingsScreen");
