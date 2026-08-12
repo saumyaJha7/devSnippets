@@ -56,6 +56,10 @@ export default function HomeScreen() {
     router.push("/(screens)/CreateScreen");
   };
 
+  const onFavouritePress = () => {
+    router.push("/(screens)/FavouriteScreen");
+  };
+
   return (
     <View style={styles.container}>
       <HomeHeader />
@@ -85,6 +89,7 @@ export default function HomeScreen() {
       <BottomNavigation
         onSettingsPress={onSettingsPress}
         onCreatePress={onCreatePress}
+        onFavouritePress={onFavouritePress}
       />
     </View>
   );

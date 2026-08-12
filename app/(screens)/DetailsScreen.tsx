@@ -60,6 +60,23 @@ export default function DetailsScreen() {
 
   const tags = Array.isArray(snippetDetails.tags) ? snippetDetails.tags : [];
 
+  const markAsFavourite = async (id: any) => {
+    try {
+      const dbInstance = await initDB();
+      if (!dbInstance) {
+        console.error("initDB returned undefined");
+        return;
+      }
+
+      await dbInstance.runAsync(
+        "UPDATE snippets SET isFavourite = true WHERE id = ?",
+        id,
+      );
+    } catch (error) {
+      console.log("error : ", error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -85,6 +102,7 @@ export default function DetailsScreen() {
                 styles.iconButton,
                 pressed && styles.pressed,
               ]}
+              onPress={() => markAsFavourite(snippetDetails?.id)}
             >
               <Ionicons
                 name={snippetDetails.favourite ? "heart" : "heart-outline"}
