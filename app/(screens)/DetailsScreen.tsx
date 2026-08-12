@@ -77,6 +77,26 @@ export default function DetailsScreen() {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const dbInstance = await initDB();
+
+      if (!dbInstance) {
+        console.log("error while getting db instance");
+        return;
+      }
+
+      await dbInstance.runAsync(
+        "DELETE FROM snippets WHERE id = ?",
+        snippetDetails.id,
+      );
+
+      router.push("/(screens)/HomeScreen");
+    } catch (error) {
+      console.log("error : ", error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -116,8 +136,9 @@ export default function DetailsScreen() {
                 styles.iconButton,
                 pressed && styles.pressed,
               ]}
+              onPress={handleDelete}
             >
-              <Ionicons name="ellipsis-horizontal" size={21} color="#FFFFFF" />
+              <Ionicons name="trash-outline" size={21} color="#FFFFFF" />
             </Pressable>
           </View>
         </View>
