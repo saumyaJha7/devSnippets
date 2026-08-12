@@ -46,7 +46,7 @@ export default function HomeScreen() {
     };
 
     loadSnippets();
-  }, []);
+  }, [snippets]);
 
   const onSettingsPress = () => {
     router.push("/(screens)/SettingsScreen");
