@@ -1,50 +1,102 @@
-# Welcome to your Expo app 👋
+# DevSnippets
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A dark-themed mobile app for saving, organizing, and reusing code snippets. Built with [Expo](https://expo.dev) (SDK 54), [expo-router](https://docs.expo.dev/router/introduction), and a local SQLite database — everything stays on-device.
 
-## Get started
+## Features
 
-1. Install dependencies
+- **Create snippets** — save a title, language, tags, and code body.
+- **Organize** — pick from a list of supported languages and add/remove tags.
+- **Browse & search** — home feed of all snippets with a live search bar.
+- **Favourites** — mark snippets as favourite and view them on a dedicated screen.
+- **Detail view** — read the full snippet, copy its code, edit or delete it.
+- **Settings** — appearance, storage, AI, and about sections.
+- **Local persistence** — snippets are stored in a `snippets` SQLite table via `expo-sqlite`.
+
+## Tech stack
+
+| Area | Choice |
+| --- | --- |
+| Framework | Expo SDK 54, React Native 0.81, React 19 |
+| Navigation | expo-router (file-based, typed routes) |
+| Database | expo-sqlite |
+| Language | TypeScript (strict) |
+| Icons | @expo/vector-icons (Ionicons) |
+| Lint | ESLint (`eslint-config-expo`) |
+
+## Project structure
+
+```
+app/
+  _layout.tsx              # Root stack; initializes the SQLite database on mount
+  index.tsx                # Entry point -> renders HomeScreen
+  (screens)/
+    HomeScreen.tsx         # Snippet feed, search, bottom navigation
+    CreateScreen.tsx       # Create form (title, language, tags, code)
+    DetailsScreen.tsx      # Snippet detail, favourite, delete
+    FavouriteScreen.tsx    # Favourited snippets
+    SettingsScreen.tsx     # App preferences
+    FileManagerScreen.tsx  # Placeholder (not yet implemented)
+components/
+  common/                  # Shared components (EmptyState, PrimaryButton - stubs)
+  home/
+    HomeHeader.tsx         # App title + file manager button
+    SearchBar.tsx          # Search input
+    SnippetCard.tsx        # Snippet list item
+    BottomNavigation.tsx   # Favourite / Create (FAB) / Settings bar
+db/
+  db.ts                    # initDB(): opens devSnippets.db and creates the table
+assets/                    # Icons, splash, and images
+```
+
+## Getting started
+
+1. Install dependencies:
 
    ```bash
    npm install
    ```
 
-2. Start the app
+2. Start the app:
 
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+   From the Expo CLI you can launch an Android emulator, iOS simulator, a development build, or Expo Go.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Other scripts:
 
 ```bash
-npm run reset-project
+npm run android   # start with Android
+npm run ios       # start with iOS
+npm run web       # start in the browser
+npm run lint      # run ESLint
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Database schema
 
-## Learn more
+The database (`devSnippets.db`) is created on app start in `db/db.ts`:
 
-To learn more about developing your project with Expo, look at the following resources:
+| Column | Type | Notes |
+| --- | --- | --- |
+| `id` | INTEGER | Primary key, auto-increment |
+| `title` | TEXT | Required |
+| `code` | TEXT | Snippet body |
+| `language` | TEXT | Programming language |
+| `tags` | TEXT | JSON-encoded array of tags |
+| `isFavourite` | INTEGER | `0`/`1`, defaults to `0` |
+| `createdAT` | TEXT | Defaults to `CURRENT_TIMESTAMP` |
+| `updatedAt` | TEXT | Defaults to `CURRENT_TIMESTAMP` |
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Conventions
 
-## Join the community
+- Import alias `@/*` maps to the project root (see `tsconfig.json`).
+- Navigation uses `expo-router` typed routes under the `(screens)` group.
+- Screens re-open the DB through `initDB()` for each query.
 
-Join our community of developers creating universal apps.
+## Roadmap
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Implement `FileManagerScreen` and the `components/common` stubs.
+- Wire up the Edit Snippet action.
+- Copy-to-clipboard on the details screen.
+- Settings for theme, font size, and AI provider / API key.
